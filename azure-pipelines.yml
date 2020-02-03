@@ -17,6 +17,7 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     choco install -y wget
     wget https://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.70.0%2Fboost_1_70_0.zip%2Fdownload&ts=1580705417
+    dir
     unzip boost_1_70_0.zip
     cd boost_1_70_0
     bootstrap.bat
