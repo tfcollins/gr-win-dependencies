@@ -43,7 +43,7 @@ steps:
     python -m pip install aqtinstall
     python -m aqt install 5.13.1 windows desktop win64_msvc2017_64 -m qtcore qtgui qtxml qtwidgets
     dir
-    dir "$(Build.BinariesDirectory)\5.13.1"
+    dir "$(Build.BinariesDirectory)\\5.13.1"
     call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
     call "$(Build.BinariesDirectory)\\5.13.1\\bin\\qtenv2.bat"
     echo Downloading and Configure QWT
