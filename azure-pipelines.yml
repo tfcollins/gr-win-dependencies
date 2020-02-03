@@ -50,6 +50,7 @@ steps:
     dir "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin"
     call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
     call "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qtenv2.bat"
+    $(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qmake.exe
     echo Downloading and Configure QWT
     choco install -y svn
     svn export svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1 
