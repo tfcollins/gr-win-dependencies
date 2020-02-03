@@ -29,5 +29,6 @@ steps:
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
+    dir
     .\b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
     echo HERE 2
