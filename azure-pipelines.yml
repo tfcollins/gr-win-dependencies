@@ -35,11 +35,12 @@ steps:
 #    .\b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
 #  displayName: 'Build Boost'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.SourcesDirectory)\boost_out'
-    ArtifactName: 'boost_build'
-    publishLocation: 'Container'
+#- task: PublishBuildArtifacts@1
+#  inputs:
+#    PathtoPublish: '$(Build.SourcesDirectory)\boost_out'
+#    ArtifactName: 'boost_build'
+#    publishLocation: 'Container'
+#  displayName: 'Publish Boost Artifacts'
 
 - script: |
     echo Install QT
