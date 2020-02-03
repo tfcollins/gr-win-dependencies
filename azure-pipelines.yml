@@ -47,6 +47,7 @@ steps:
     echo "$(Build.SourcesDirectory)\\5.13.1"
     dir "$(Build.SourcesDirectory)\\5.13.1"
     dir "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64"
+    dir "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin"
     call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
     call "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qtenv2.bat"
     echo Downloading and Configure QWT
