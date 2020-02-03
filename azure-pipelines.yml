@@ -25,3 +25,8 @@ steps:
     .\b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    .\b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
+    echo HERE 2
