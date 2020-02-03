@@ -35,10 +35,12 @@ steps:
 - script: |
     echo Install QT
     pwd
-    echo "$(Build.BinariesDirectory)\Qt"
-    mkdir "$(Build.BinariesDirectory)\Qt"
+    cd $(Build.SourcesDirectory)
+    pwd
+    echo "$(Build.BinariesDirectory)\\Qt"
+    mkdir "$(Build.BinariesDirectory)\\Qt"
     python -m pip install aqtinstall
-    python -m aqt install --outputdir "$(Build.BinariesDirectory)\Qt\5_13_1" 5.13.1 windows desktop win64_msvc2017_64 -m qtcore qtgui qtxml qtwidgets
+    python -m aqt install --outputdir "$(Build.BinariesDirectory)\\Qt\\5_13_1" 5.13.1 windows desktop win64_msvc2017_64 -m qtcore qtgui qtxml qtwidgets
     dir "$(Build.BinariesDirectory)\Qt"
     echo Downloading and Configure QWT
     choco install -y svn
