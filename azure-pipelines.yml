@@ -40,3 +40,14 @@ steps:
     PathtoPublish: '$(Build.SourcesDirectory)\boost_out'
     ArtifactName: 'boost_build'
     publishLocation: 'Container'
+
+- script: |
+    echo Install QT
+    python -m pip install aqtinstall
+    python -m aqt install --outputdir "$(Build.BinariesDirectory)\\Qt_5.13.1" windows desktop win_msvc2017 -m qtcore qtgui qtxml qtwidgets
+    #echo Downloading and Configure QWT
+    #choco install -y svn
+    #svn export svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1 
+    #SET PATH="%PATH%;%CD%\boost_out"
+    #cd qwt-6.1
+  displayName: 'Build QWT'
