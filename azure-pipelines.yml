@@ -22,6 +22,6 @@ steps:
     unzip boost_1_70_0.zip
     cd boost_1_70_0
     bootstrap.bat
-    b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
+    .\b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
