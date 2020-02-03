@@ -14,7 +14,7 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
+    echo Downloading and Configure Boost
     choco install -y wget
     wget https://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.70.0%2Fboost_1_70_0.zip%2Fdownload&ts=1580705417 -q -O "boost_1_70_0.zip"
     dir
@@ -22,15 +22,11 @@ steps:
     unzip -q boost_1_70_0.zip
     cd boost_1_70_0
     bootstrap.bat
-    dir
-    .\b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  displayName: 'Download Tools'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    dir
+    echo Building Boost
     cd boost_1_70_0
-    dir
-    .\b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
-    echo HERE 2
+    .\b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install -j2
+    #.\b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
+   displayName: 'Build Boost'
