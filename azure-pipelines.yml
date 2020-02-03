@@ -46,9 +46,9 @@ steps:
     dir
     echo "$(Build.SourcesDirectory)\\5.13.1"
     dir "$(Build.SourcesDirectory)\\5.13.1"
-    dir "$(Build.SourcesDirectory)\\5.13.1\\msvc2017"
+    dir "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64"
     call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
-    call "$(Build.SourcesDirectory)\\5.13.1\\msvc2017\\bin\\qtenv2.bat"
+    call "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qtenv2.bat"
     echo Downloading and Configure QWT
     choco install -y svn
     svn export svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1 
