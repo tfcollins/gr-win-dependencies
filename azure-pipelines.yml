@@ -1,25 +1,70 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
-pool:
-  vmImage: 'vs2017-win2016'
+jobs:
+- job: Build_GR_Windows_10_Deps
+  timeoutInMinutes: 0
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  pool:
+    vmImage: 'vs2017-win2016'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    choco install -y wget
-    wget https://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.70.0%2Fboost_1_70_0.zip%2Fdownload&ts=1580705417
-    unzip boost_1_70_0.zip
-    cd boost_1_70_0
-    bootstrap.bat
-    b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  steps:
+
+  - script: |
+      echo Downloading and Configure Boost
+      choco install -y wget
+      wget https://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.70.0%2Fboost_1_70_0.zip%2Fdownload&ts=1580705417 -q -O "boost_1_70_0.zip"
+      ren boost* boost_1_70_0.zip
+      unzip -q boost_1_70_0.zip
+      mkdir boost_out
+      SET OUTPUT="%CD%\boost_out"
+      cd boost_1_70_0
+      bootstrap.bat && b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2 && cd $(Build.SourcesDirectory) && 7z a -t7z boost.7z "%OUTPUT%"
+    displayName: 'Build Boost'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\boost.7z'
+      ArtifactName: 'boost.7z'
+      publishLocation: 'Container'
+    displayName: 'Publish Boost Artifacts'
+
+  - script: |
+      echo Install QT
+      cd $(Build.SourcesDirectory)
+      python -m pip install aqtinstall
+      python -m aqt install 5.13.1 windows desktop win64_msvc2017_64 -m qtcore qtgui qtxml qtwidgets
+      call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
+      echo Downloading and Configure QWT
+      choco install -y svn
+      svn export svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1 
+      cd qwt-6.1
+      call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
+      $(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qmake qwt.pro
+      nmake
+      nmake install
+      cd $(Build.SourcesDirectory)
+      7z a -t7z Qwt_6_1_5.7z C:\\Qwt-6.1.5-svn
+    displayName: 'Build QWT'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\Qwt_6_1_5.7z'
+      ArtifactName: 'Qwt_6_1_5.7z'
+      publishLocation: 'Container'
+    displayName: 'Publish QWT Artifacts'
+
+  - script: |
+      echo Collecting Aritfacts
+      mkdir "$(Build.SourcesDirectory)\all"
+      cp "$(Build.SourcesDirectory)\Qwt_6_1_5.7z" "$(Build.SourcesDirectory)\all"
+      cp "$(Build.SourcesDirectory)\boost.7z" "$(Build.SourcesDirectory)\all"
+    displayName: 'Collect Artifacts For Deploy'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.SourcesDirectory)\all'
+      artifact: 'gr_win_deps'
+      publishLocation: 'pipeline'
+    displayName: 'Publish All Artifacts To Pipeline'
+
