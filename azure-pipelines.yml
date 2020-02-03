@@ -26,7 +26,16 @@ steps:
 
 - script: |
     echo Building Boost
+    mkdir boost_out
+    echo %CD%
+    SET OUTPUT="%CD%\boost_out"
     cd boost_1_70_0
-    .\b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install -j2
+    .\b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
     #.\b2 -j2 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared --build-type=complete stage
   displayName: 'Build Boost'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Agent.BuildDirectory)\boost_out'
+    ArtifactName: 'boost_build'
+    publishLocation: 'Container'
