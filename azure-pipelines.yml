@@ -37,6 +37,6 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Agent.BuildDirectory)\boost_out'
+    PathtoPublish: '$(Build.SourcesDirectory)\boost_out'
     ArtifactName: 'boost_build'
     publishLocation: 'Container'
