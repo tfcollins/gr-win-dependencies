@@ -17,22 +17,23 @@ steps:
     echo Downloading and Configure Boost
     choco install -y wget
     wget https://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.70.0%2Fboost_1_70_0.zip%2Fdownload&ts=1580705417 -q -O "boost_1_70_0.zip"
-    dir
     ren boost* boost_1_70_0.zip
     unzip -q boost_1_70_0.zip
-    cd boost_1_70_0
-    bootstrap.bat
-  displayName: 'Download Tools'
-
-- script: |
-    echo Building Boost
     mkdir boost_out
-    echo %CD%
     SET OUTPUT="%CD%\boost_out"
-    echo Targeting Boost install to %OUTPUT%
     cd boost_1_70_0
-    .\b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
+    bootstrap.bat && b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
   displayName: 'Build Boost'
+
+#- script: |
+#    echo Building Boost
+#    mkdir boost_out
+#    echo %CD%
+#    SET OUTPUT="%CD%\boost_out"
+#    echo Targeting Boost install to %OUTPUT%
+#    cd boost_1_70_0
+#    .\b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
+#  displayName: 'Build Boost'
 
 - task: PublishBuildArtifacts@1
   inputs:
