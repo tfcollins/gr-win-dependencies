@@ -7,7 +7,7 @@ trigger:
 - master
 
 jobs:
-- job: Build GR Windows 10 Artifacts
+- job: Build_GR_Windows_10_Deps
   timeoutInMinutes: 0
 
   pool:
