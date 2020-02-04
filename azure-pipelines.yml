@@ -10,9 +10,9 @@ pool:
   vmImage: 'vs2017-win2016'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+#
 #- script: |
 #    echo Downloading and Configure Boost
 #    choco install -y wget
@@ -24,7 +24,7 @@ steps:
 #    cd boost_1_70_0
 #    bootstrap.bat && b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
 #  displayName: 'Build Boost'
-
+#
 #- task: PublishBuildArtifacts@1
 #  inputs:
 #    PathtoPublish: '$(Build.SourcesDirectory)\boost_out'
@@ -34,23 +34,10 @@ steps:
 
 - script: |
     echo Install QT
-    pwd
     cd $(Build.SourcesDirectory)
-    pwd
-    echo "$(Build.SourcesDirectory)\\Qt"
-    mkdir "$(Build.SourcesDirectory)\\Qt"
-    dir
     python -m pip install aqtinstall
     python -m aqt install 5.13.1 windows desktop win64_msvc2017_64 -m qtcore qtgui qtxml qtwidgets
-    echo "DIR"
-    dir
-    echo "$(Build.SourcesDirectory)\\5.13.1"
-    dir "$(Build.SourcesDirectory)\\5.13.1"
-    dir "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64"
-    dir "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin"
     call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
-    call "$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qtenv2.bat"
-    $(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qmake.exe
     echo Downloading and Configure QWT
     choco install -y svn
     svn export svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1 
@@ -58,4 +45,13 @@ steps:
     call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
     $(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qmake qwt.pro
     nmake
+    nmake install
+    dir C:\\Qwt-6.1.5-svn
   displayName: 'Build QWT'
+
+- task: PublishBuildArtifacts@2
+  inputs:
+    PathtoPublish: '$(Build.SourcesDirectory)\qwt-6.1'
+    ArtifactName: 'boost_build'
+    publishLocation: 'Container'
+  displayName: 'Publish QWT Artifacts'
