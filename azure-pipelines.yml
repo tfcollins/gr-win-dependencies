@@ -24,7 +24,12 @@ steps:
     cd boost_1_70_0
     bootstrap.bat && b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
     cd $(Build.SourcesDirectory)
+    echo ------Checking------
+    echo %OUTPUT%
+    dir %OUTPUT%
+    echo ------Packaging------
     7z a -t7z boost.7z "%OUTPUT%"
+    dir
   displayName: 'Build Boost'
 
 - task: PublishBuildArtifacts@1
