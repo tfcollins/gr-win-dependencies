@@ -54,7 +54,6 @@ steps:
     echo Downloading and Configure QWT
     choco install -y svn
     svn export svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.1 
-    SET PATH="%PATH%;%CD%\boost_out"
     call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
     cd qwt-6.1
     qmake qwt.pro
