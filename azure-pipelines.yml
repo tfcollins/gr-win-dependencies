@@ -9,6 +9,8 @@ trigger:
 pool:
   vmImage: 'vs2017-win2016'
 
+timeoutInMinutes: 0
+
 steps:
 
 - script: |
