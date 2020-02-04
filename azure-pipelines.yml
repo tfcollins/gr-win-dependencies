@@ -41,7 +41,7 @@ steps:
     mkdir "$(Build.SourcesDirectory)\\Qt"
     dir
     python -m pip install aqtinstall
-    python -m aqt install 5.13.1 windows desktop win64_msvc2017_64 -m all
+    python -m aqt install 5.13.1 windows desktop win64_msvc2017_64 -m qtcore qtgui qtxml qtwidgets
     echo "DIR"
     dir
     echo "$(Build.SourcesDirectory)\\5.13.1"
@@ -57,6 +57,6 @@ steps:
     call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
     cd qwt-6.1
     SET PATH="%PATH%;$(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin"
-    qmake qwt.pro
+    $(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qmake qwt.pro
     nmake
   displayName: 'Build QWT'
