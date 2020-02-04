@@ -14,18 +14,18 @@ steps:
 #  displayName: 'Run a one-line script'
 #
 - script: |
-   echo Downloading and Configure Boost
-   choco install -y wget
-   wget https://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.70.0%2Fboost_1_70_0.zip%2Fdownload&ts=1580705417 -q -O "boost_1_70_0.zip"
-   ren boost* boost_1_70_0.zip
-   unzip -q boost_1_70_0.zip
-   mkdir boost_out
-   SET OUTPUT="%CD%\boost_out"
-   cd boost_1_70_0
-   bootstrap.bat && b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
-   cd $(Build.SourcesDirectory)
-   7z a -t7z boost.7z "%OUTPUT%"
- displayName: 'Build Boost'
+    echo Downloading and Configure Boost
+    choco install -y wget
+    wget https://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.70.0%2Fboost_1_70_0.zip%2Fdownload&ts=1580705417 -q -O "boost_1_70_0.zip"
+    ren boost* boost_1_70_0.zip
+    unzip -q boost_1_70_0.zip
+    mkdir boost_out
+    SET OUTPUT="%CD%\boost_out"
+    cd boost_1_70_0
+    bootstrap.bat && b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2
+    cd $(Build.SourcesDirectory)
+    7z a -t7z boost.7z "%OUTPUT%"
+  displayName: 'Build Boost'
 
 - task: PublishBuildArtifacts@1
  inputs:
