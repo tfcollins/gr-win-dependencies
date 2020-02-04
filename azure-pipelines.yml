@@ -50,7 +50,7 @@ steps:
     echo ------Checking------
     dir C:\\Qwt-6.1.5-svn
     echo ------Packaging------
-    7za a -t7z Qwt_6_1_5.7z C:\\Qwt-6.1.5-svn
+    7z a -t7z Qwt_6_1_5.7z C:\\Qwt-6.1.5-svn
   displayName: 'Build QWT'
 
 - task: PublishBuildArtifacts@1
