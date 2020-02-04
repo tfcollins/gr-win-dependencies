@@ -28,11 +28,11 @@ steps:
   displayName: 'Build Boost'
 
 - task: PublishBuildArtifacts@1
- inputs:
-   PathtoPublish: '$(Build.SourcesDirectory)\boost.7z'
-   ArtifactName: 'boost.7z'
-   publishLocation: 'Container'
- displayName: 'Publish Boost Artifacts'
+  inputs:
+    PathtoPublish: '$(Build.SourcesDirectory)\boost.7z'
+    ArtifactName: 'boost.7z'
+    publishLocation: 'Container'
+  displayName: 'Publish Boost Artifacts'
 
 - script: |
     echo Install QT
