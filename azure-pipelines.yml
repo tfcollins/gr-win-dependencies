@@ -10,9 +10,7 @@ pool:
   vmImage: 'vs2017-win2016'
 
 steps:
-#- script: echo Hello, world!
-#  displayName: 'Run a one-line script'
-#
+
 - script: |
     echo Downloading and Configure Boost
     choco install -y wget
@@ -60,3 +58,17 @@ steps:
     ArtifactName: 'Qwt_6_1_5.7z'
     publishLocation: 'Container'
   displayName: 'Publish QWT Artifacts'
+
+- script: |
+    echo Collecting Aritfacts
+    mkdir "$(Build.SourcesDirectory)\all"
+    cp "$(Build.SourcesDirectory)\Qwt_6_1_5.7z" "$(Build.SourcesDirectory)\all"
+    cp "$(Build.SourcesDirectory)\boost.7z" "$(Build.SourcesDirectory)\all"
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.SourcesDirectory)\all'
+    artifact: 'gr_win_deps'
+    publishLocation: 'pipeline'
+  displayName: 'Publish All Artifacts To Pipeline'
+  
