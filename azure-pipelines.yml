@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
@@ -47,11 +42,7 @@ jobs:
       call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
       $(Build.SourcesDirectory)\\5.13.1\\msvc2017_64\\bin\\qmake qwt.pro
       nmake
-      echo ------Installing------
       nmake install
-      echo ------Checking------
-      dir C:\\Qwt-6.1.5-svn
-      echo ------Packaging------
       cd $(Build.SourcesDirectory)
       7z a -t7z Qwt_6_1_5.7z C:\\Qwt-6.1.5-svn
     displayName: 'Build QWT'
@@ -68,6 +59,7 @@ jobs:
       mkdir "$(Build.SourcesDirectory)\all"
       cp "$(Build.SourcesDirectory)\Qwt_6_1_5.7z" "$(Build.SourcesDirectory)\all"
       cp "$(Build.SourcesDirectory)\boost.7z" "$(Build.SourcesDirectory)\all"
+    displayName: 'Collect Artifacts For Deploy'
 
   - task: PublishPipelineArtifact@1
     inputs:
