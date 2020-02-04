@@ -49,7 +49,7 @@ steps:
     dir C:\\Qwt-6.1.5-svn
   displayName: 'Build QWT'
 
-- task: PublishBuildArtifacts@2
+- task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.SourcesDirectory)\qwt-6.1'
     ArtifactName: 'boost_build'
