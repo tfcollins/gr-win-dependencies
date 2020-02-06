@@ -37,11 +37,13 @@ jobs:
       cd $(Build.SourcesDirectory)
       mkdir $(Build.SourcesDirectory)\uhd
       git clone https://github.com/EttusResearch/uhd.git uhd_build
-      cd uhd_build\host
+      cd uhd_build
+      git checkout tags/v3.15.0.0
+      cd host
       mkdir build
       cd build
       call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
-      cmake .. -DCMAKE_INSTALL_PREFIX=$(Build.SourcesDirectory)\uhd -DBOOST_ROOT=$(Build.SourcesDirectory)\boost_out
+      cmake .. -A x64 -DCMAKE_INSTALL_PREFIX=$(Build.SourcesDirectory)\uhd -DBOOST_ROOT=$(Build.SourcesDirectory)\boost_out
       cmake --build . --config Release -j 2 --target INSTALL
       7z a -t7z uhd.7z $(Build.SourcesDirectory)\uhd
     displayName: 'Build UHD'
