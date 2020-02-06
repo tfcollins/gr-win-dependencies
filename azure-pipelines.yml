@@ -45,6 +45,7 @@ jobs:
       call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
       cmake .. -A x64 -DCMAKE_INSTALL_PREFIX=$(Build.SourcesDirectory)\uhd -DBOOST_ROOT=$(Build.SourcesDirectory)\boost_out
       cmake --build . --config Release -j 2 --target INSTALL
+      cd $(Build.SourcesDirectory)
       7z a -t7z uhd.7z $(Build.SourcesDirectory)\uhd
     displayName: 'Build UHD'
 
