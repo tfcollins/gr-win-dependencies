@@ -32,8 +32,8 @@ jobs:
 
   - script: |
       echo Build UHD
-      pip install mako
-      pip3 install mako
+      C:/hostedtoolcache/windows/Python/3.8.1/x86/python.exe -m pip install mako
+      C:/hostedtoolcache/windows/Python/3.8.1/x86/python.exe -m pip3 install mako
       cd $(Build.SourcesDirectory)
       mkdir $(Build.SourcesDirectory)\uhd
       git clone https://github.com/EttusResearch/uhd.git uhd_build
