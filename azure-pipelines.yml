@@ -119,18 +119,3 @@ jobs:
       ArtifactName: 'PreBuilt'
       publishLocation: 'Container'
     displayName: 'Publish PreBuilt Artifacts'
-
-  - script: |
-      echo Collecting Aritfacts
-      mkdir "$(Build.SourcesDirectory)\all"
-      cp "$(Build.SourcesDirectory)\Qwt_6_1_5.7z" "$(Build.SourcesDirectory)\all"
-      cp "$(Build.SourcesDirectory)\boost.7z" "$(Build.SourcesDirectory)\all"
-    displayName: 'Collect Artifacts For Deploy'
-
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: '$(Build.SourcesDirectory)\all'
-      artifact: 'gr_win_deps'
-      publishLocation: 'pipeline'
-    displayName: 'Publish All Artifacts To Pipeline'
-
