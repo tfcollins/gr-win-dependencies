@@ -13,11 +13,12 @@ jobs:
   - script: |
       echo Downloading and Configure Boost
       choco install -y wget
+      cd $(Build.SourcesDirectory)
       wget https://downloads.sourceforge.net/project/boost/boost/1.70.0/boost_1_70_0.zip?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.70.0%2Fboost_1_70_0.zip%2Fdownload&ts=1580705417 -q -O "boost_1_70_0.zip"
       ren boost* boost_1_70_0.zip
       unzip -q boost_1_70_0.zip
-      mkdir boost_out
-      SET OUTPUT="%CD%\boost_out"
+      mkdir $(Build.SourcesDirectory)\boost_out
+      SET OUTPUT="$(Build.SourcesDirectory)\boost_out"
       cd boost_1_70_0
       bootstrap.bat && b2 --build-type=complete --abbreviate-paths architecture=x86 address-model=64 install --prefix=%OUTPUT% -j2 && cd $(Build.SourcesDirectory) && 7z a -t7z boost.7z "%OUTPUT%"
     displayName: 'Build Boost'
@@ -28,6 +29,28 @@ jobs:
       ArtifactName: 'boost.7z'
       publishLocation: 'Container'
     displayName: 'Publish Boost Artifacts'
+
+  - script: |
+      echo Build UHD
+      cd $(Build.SourcesDirectory)
+      mkdir $(Build.SourcesDirectory)\uhd
+      git clone https://github.com/EttusResearch/uhd.git uhd_build
+      cd uhd_build\host
+      mkdir build
+      cd build
+      call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
+      cmake .. -DCMAKE_INSTALL_PREFIX=$(Build.SourcesDirectory)\uhd -DBOOST_ROOT=$(Build.SourcesDirectory)\boost_out
+      make
+      make install
+      7z a -t7z uhd.7z $(Build.SourcesDirectory)\uhd
+    displayName: 'Build UHD'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\uhd.7z'
+      ArtifactName: 'uhd.7z'
+      publishLocation: 'Container'
+    displayName: 'Publish UHD Artifacts'
 
   - script: |
       echo Install QT
