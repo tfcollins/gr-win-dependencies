@@ -32,6 +32,7 @@ jobs:
 
   - script: |
       echo Build UHD
+      pip install mako
       cd $(Build.SourcesDirectory)
       mkdir $(Build.SourcesDirectory)\uhd
       git clone https://github.com/EttusResearch/uhd.git uhd_build
