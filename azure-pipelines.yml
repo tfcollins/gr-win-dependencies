@@ -124,6 +124,10 @@ jobs:
 
 - job: gtk
   timeoutInMinutes: 90
+  
+  pool:
+  vmImage: 'vs2017-win2016'
+  
   strategy:
     matrix:
       x64-win2016:
