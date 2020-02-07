@@ -106,13 +106,13 @@ jobs:
       unzip -qq swig.zip -d C:\deps\swig\
       rm swig.zip
       7z a -t7z swig.7z C:\deps\swig
-      echo "---GTK---"
-      wget https://ci.appveyor.com/api/buildjobs/v8mpwb84x5swl64r/artifacts/gvsbuild-vs15-x64.tar.gz -q -O "gtk.tar.gz"
-      mkdir C:\deps\gtk
-      tar -C C:\deps\gtk -xf gtk.tar.gz
-      rm gtk.tar.gz
-      mv C:\\deps\\gtk\\release C:\\deps\\gvsbuild
-      7z a -t7z gvsbuild.7z C:\deps\gvsbuild      
+      #echo "---GTK---"
+      #wget https://ci.appveyor.com/api/buildjobs/v8mpwb84x5swl64r/artifacts/gvsbuild-vs15-x64.tar.gz -q -O "gtk.tar.gz"
+      #mkdir C:\deps\gtk
+      #tar -C C:\deps\gtk -xf gtk.tar.gz
+      #rm gtk.tar.gz
+      #mv C:\\deps\\gtk\\release C:\\deps\\gvsbuild
+      #7z a -t7z gvsbuild.7z C:\deps\gvsbuild      
     displayName: 'Collect built dependencies'
 
   - task: PublishBuildArtifacts@1
@@ -161,11 +161,12 @@ jobs:
     - task: ArchiveFiles@2
       displayName: Archive release
       inputs:
+        archiveType: 7z
         rootFolderOrFile: $(BUILD_DIR)\$(ARTIFACT_PATH)
         includeRootFolder: false
-        archiveFile: '$(Build.ArtifactStagingDirectory)/gvsbuild-vs$(VS_VER)-$(PLATFORM).zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/gvsbuild-vs$(VS_VER)-$(PLATFORM).7z'
     - task: PublishBuildArtifacts@1
       displayName: Publish packages
       inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)/gvsbuild-vs$(VS_VER)-$(PLATFORM).zip'
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/gvsbuild-vs$(VS_VER)-$(PLATFORM).7z'
         artifactName: gvsbuild-vs$(VS_VER)-$(PLATFORM)
