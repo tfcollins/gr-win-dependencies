@@ -1,5 +1,6 @@
 trigger:
 - master
+- gtk
 
 jobs:
 - job: Build_GR_Windows_10_Deps
