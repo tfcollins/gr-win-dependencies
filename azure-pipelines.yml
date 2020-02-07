@@ -105,14 +105,7 @@ jobs:
       mkdir C:\deps\swig
       unzip -qq swig.zip -d C:\deps\swig\
       rm swig.zip
-      7z a -t7z swig.7z C:\deps\swig
-      #echo "---GTK---"
-      #wget https://ci.appveyor.com/api/buildjobs/v8mpwb84x5swl64r/artifacts/gvsbuild-vs15-x64.tar.gz -q -O "gtk.tar.gz"
-      #mkdir C:\deps\gtk
-      #tar -C C:\deps\gtk -xf gtk.tar.gz
-      #rm gtk.tar.gz
-      #mv C:\\deps\\gtk\\release C:\\deps\\gvsbuild
-      #7z a -t7z gvsbuild.7z C:\deps\gvsbuild      
+      7z a -t7z swig.7z C:\deps\swig   
     displayName: 'Collect built dependencies'
 
   - task: PublishBuildArtifacts@1
