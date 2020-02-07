@@ -103,6 +103,7 @@ jobs:
       wget https://sourceforge.net/projects/swig/files/swigwin/swigwin-3.0.8/swigwin-3.0.8.zip -q -O "swig.zip"
       mkdir C:\deps\swig
       unzip -qq swig.zip -d C:\deps\swig\
+      rm swig.zip
       7z a -t7z swig.7z C:\deps\swig
       echo "---GTK---"
       wget https://ci.appveyor.com/api/buildjobs/v8mpwb84x5swl64r/artifacts/gvsbuild-vs15-x64.tar.gz -q -O "gtk.tar.gz"
