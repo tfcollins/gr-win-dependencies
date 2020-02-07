@@ -1,5 +1,6 @@
 trigger:
 - master
+- gtk
 
 jobs:
 - job: Build_GR_Windows_10_Deps
@@ -104,14 +105,7 @@ jobs:
       mkdir C:\deps\swig
       unzip -qq swig.zip -d C:\deps\swig\
       rm swig.zip
-      7z a -t7z swig.7z C:\deps\swig
-      echo "---GTK---"
-      wget https://ci.appveyor.com/api/buildjobs/v8mpwb84x5swl64r/artifacts/gvsbuild-vs15-x64.tar.gz -q -O "gtk.tar.gz"
-      mkdir C:\deps\gtk
-      tar -C C:\deps\gtk -xf gtk.tar.gz
-      rm gtk.tar.gz
-      mv C:\\deps\\gtk\\release C:\\deps\\gvsbuild
-      7z a -t7z gvsbuild.7z C:\deps\gvsbuild      
+      7z a -t7z swig.7z C:\deps\swig   
     displayName: 'Collect built dependencies'
 
   - task: PublishBuildArtifacts@1
@@ -120,3 +114,52 @@ jobs:
       ArtifactName: 'PreBuilt'
       publishLocation: 'Container'
     displayName: 'Publish PreBuilt Artifacts'
+
+- job: gtk
+  timeoutInMinutes: 90
+  
+  pool:
+    vmImage: 'vs2017-win2016'
+  
+  strategy:
+    matrix:
+      x64-win2016:
+        VS_VER: "15"
+        PLATFORM: "x64"
+        ARTIFACT_PATH: "gtk/x64/release"
+  variables:
+    CACHE_DIR: $(Pipeline.Workspace)\_download_cache
+    MSYS2_ROOT: $(System.Workfolder)\msys64
+    BUILD_DIR: $(System.Workfolder)\gtk-build
+    PYTHONUNBUFFERED: 1
+    AZP_CACHING_CONTENT_FORMAT: 'Files'  # https://github.com/microsoft/azure-pipelines-agent/issues/2595
+  steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.7'
+    # The git directory contains cygwin binaries conflicting with MSYS2
+    - script: |
+        git clone https://github.com/wingtk/gvsbuild.git
+        rmdir "C:\Program Files\Git" /s /q
+      displayName: Remove GIT
+    - script: |
+        choco install --no-progress msys2 --params="/InstallDir:%MSYS2_ROOT% /NoPath"
+      displayName: Install MSYS2
+    - script: |
+        cd gvsbuild
+        python.exe build.py build --build-dir=%BUILD_DIR% --msys-dir=%MSYS2_ROOT% --archives-download-dir=%CACHE_DIR% --platform=%PLATFORM% --vs-ver=%VS_VER% -k --enable-gi --py-wheel --py-egg --python-ver 3.7 enchant gtk gtk3-full pycairo pygobject lz4
+        python.exe build.py build --build-dir=%BUILD_DIR% --msys-dir=%MSYS2_ROOT% --archives-download-dir=%CACHE_DIR% --platform=%PLATFORM% --vs-ver=%VS_VER% -k --fast-build --clean-built --py-wheel --py-egg --python-ver 3.6 pycairo pygobject
+        python.exe build.py build --build-dir=%BUILD_DIR% --msys-dir=%MSYS2_ROOT% --archives-download-dir=%CACHE_DIR% --platform=%PLATFORM% --vs-ver=%VS_VER% -k --fast-build --clean-built --py-wheel --py-egg --python-ver 3.5 pycairo pygobject
+      displayName: gvsbuild
+    - task: ArchiveFiles@2
+      displayName: Archive release
+      inputs:
+        archiveType: 7z
+        rootFolderOrFile: $(BUILD_DIR)\$(ARTIFACT_PATH)
+        includeRootFolder: false
+        archiveFile: '$(Build.ArtifactStagingDirectory)/gvsbuild-vs$(VS_VER)-$(PLATFORM).7z'
+    - task: PublishBuildArtifacts@1
+      displayName: Publish packages
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/gvsbuild-vs$(VS_VER)-$(PLATFORM).7z'
+        artifactName: gvsbuild-vs$(VS_VER)-$(PLATFORM)
