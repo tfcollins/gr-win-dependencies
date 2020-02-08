@@ -21,7 +21,7 @@ jobs:
       git checkout tags/v2.5.0
       mkdir build
       cd build
-      cmake -G "Visual Studio 15 2017 Win64" -DGSL_INSTALL_MULTI_CONFIG=ON -DBUILD_SHARED_LIBS=ON -DMSVC_RUNTIME_DYNAMIC=ON  -DCMAKE_INSTALL_PREFIX=$(Build.SourcesDirectory)\gsl_out
+      cmake .. -G "Visual Studio 15 2017 Win64" -DGSL_INSTALL_MULTI_CONFIG=ON -DBUILD_SHARED_LIBS=ON -DMSVC_RUNTIME_DYNAMIC=ON  -DCMAKE_INSTALL_PREFIX=$(Build.SourcesDirectory)\gsl_out
       cmake --build . --config Release --target install  
       cd $(Build.SourcesDirectory)
       7z a -t7z gsl.7z $(Build.SourcesDirectory)\gsl_out
