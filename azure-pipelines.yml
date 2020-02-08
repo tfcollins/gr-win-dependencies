@@ -1,6 +1,6 @@
 trigger:
 - master
-- gtk
+- gsl
 
 jobs:
 - job: Build_GR_Windows_10_Deps
@@ -10,6 +10,29 @@ jobs:
     vmImage: 'vs2017-win2016'
 
   steps:
+
+  - script: |
+      echo Building GSL
+      choco install -y wget
+      cd $(Build.SourcesDirectory)
+      mkdir gsl_out
+      git clone https://github.com/ampl/gsl.git
+      cd gsl
+      git checkout tags/v2.5.0
+      mkdir build
+      cd build
+      cmake -G "Visual Studio 15 2017 Win64" -DGSL_INSTALL_MULTI_CONFIG=ON -DBUILD_SHARED_LIBS=ON -DMSVC_RUNTIME_DYNAMIC=ON  -DCMAKE_INSTALL_PREFIX=$(Build.SourcesDirectory)\gsl_out
+      cmake --build . --config Release --target install  
+      cd $(Build.SourcesDirectory)
+      7z a -t7z gsl.7z $(Build.SourcesDirectory)\gsl_out
+    displayName: 'Build GSL'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\gsl.7z'
+      ArtifactName: 'gsl.7z'
+      publishLocation: 'Container'
+    displayName: 'Publish GSL Artifacts'
 
   - script: |
       echo Downloading and Configure Boost
